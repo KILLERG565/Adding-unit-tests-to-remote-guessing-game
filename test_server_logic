@@ -1,0 +1,39 @@
+import unittest
+from unittest.mock import patch
+from server_logic import generate_random, parse_guess, evaluate_guess
+
+class TestServerLogic(unittest.TestCase):
+
+    @patch("server_logic.random.randint")
+    def test_generate_random_easy(self, mock_rand):
+        mock_rand.return_value = 3
+        self.assertEqual(generate_random(1), 3)
+
+    @patch("server_logic.random.randint")
+    def test_generate_random_medium(self, mock_rand):
+        mock_rand.return_value = 25
+        self.assertEqual(generate_random(2), 25)
+
+    @patch("server_logic.random.randint")
+    def test_generate_random_hard(self, mock_rand):
+        mock_rand.return_value = 77
+        self.assertEqual(generate_random(3), 77)
+
+    def test_parse_guess_valid(self):
+        self.assertEqual(parse_guess("42"), 42)
+
+    def test_parse_guess_invalid(self):
+        self.assertIsNone(parse_guess("abc"))
+
+    def test_evaluate_guess_correct(self):
+        self.assertEqual(evaluate_guess(10, 10), "CORRECT!")
+
+    def test_evaluate_guess_high(self):
+        self.assertEqual(evaluate_guess(5, 10), "=Guess Lower\nenter guess: ")
+
+    def test_evaluate_guess_low(self):
+        self.assertEqual(evaluate_guess(10, 5), "=Guess Higher\nenter guess: ")
+
+if __name__ == '__main__':
+    unittest.main()
+# the server 
